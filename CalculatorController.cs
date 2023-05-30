@@ -27,7 +27,6 @@ namespace CalculatorRPN
                     ui.Print("Commands: q c + - * / number");
                 ui.Print(stack.ToString());
 
-
                 string input = ui.GetInput();
                 if (ValidateInput(input))
                 {
@@ -53,18 +52,12 @@ namespace CalculatorRPN
                             Calculate(input);
                     }
 
-
                 }
                 else
                 {
                     ui.Print("Illegal command, ignored");
                     continue;
                 }
-
-
-
-
-
 
             }
 
