@@ -26,7 +26,7 @@
 
         public int Count()
         {
-            return stack.Count();
+            return stack.Count;
         }
 
         public override string ToString()
