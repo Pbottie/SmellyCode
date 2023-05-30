@@ -1,83 +1,105 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
+﻿using System.Text;
 
 namespace CalculatorRPN
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
-            DoubleStack stack = new DoubleStack();
-            while (true)
+            IUI ui;
+            IDoubleStorage stack;
+
+            ui = new ConsoleUI();
+            stack = new DoubleStack();
+
+            CalculatorController calculator = new CalculatorController(ui, stack);
+
+            calculator.Run();
+
+
+            //while (true)
+            //{
+            //    if (stack.Count == 0)
+            //    {
+            //        Console.WriteLine("Commands: q c + - * / number");
+            //        Console.WriteLine("[]");
+            //    }
+            //    else
+            //    {
+            //        PrintStack(stack);
+            //    }
+
+            //    string input = GetInput();
+
+            //    char command = input[0];
+
+
+            //    if (Char.IsDigit(command))
+            //    {
+            //        double value = Convert.ToDouble(input);
+            //        stack.Push(value);
+            //    }
+            //    else if (command == 'c')
+            //    {
+            //        stack.Clear();
+            //    }
+            //    else if (command == 'q')
+            //    {
+            //        break;
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Illegal command, ignored");
+            //    }
+
+            //}
+        }
+
+        static void PrintStack(Stack<double> stack)
+        {
+            string output = "[";
+            foreach (var item in stack)
             {
-                if (stack.Depth == 0)
-                {
-                    Console.WriteLine("Commands: q c + - * / number");
-                    Console.WriteLine("[]");
-                }
-                else
-                {
-                    Console.WriteLine(stack.ToString());
-                }
-                string input = GetInput();
-
-                char command = input[0];
-                if (Char.IsDigit(command))
-                {
-                    double value = Convert.ToDouble(input);
-                    stack.Push(value);
-                }
-                else if (command == '+')
-                {
-                    stack.Push(stack.Pop() + stack.Pop());
-                }
-                else if (command == '*')
-                {
-                    stack.Push(stack.Pop() * stack.Pop());
-                }
-                else if (command == '-')
-                {
-                    double d = stack.Pop();
-                    stack.Push(stack.Pop() - d);
-                }
-                else if (command == '/')
-                {
-                    double d = stack.Pop();
-                    stack.Push(stack.Pop() / d);
-                }
-                else if (command == 'c')
-                {
-                    stack.Clear();
-                }
-                else if (command == 'q')
-                {
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Illegal command, ignored");
-                }
-
+                output += item.ToString() + ",";
             }
+            output = output.Substring(0, output.Length - 1);
+            output += "]";
+            Console.WriteLine(output);
+
         }
 
 
-        static string GetInput()
+        static void Calculate(Stack<double> stack, char command)
         {
-            string input = Console.ReadLine().Trim();
-            if (input == "") input = " ";
-            return input;
-
+            if (command == '+')
+            {
+                stack.Push(stack.Pop() + stack.Pop());
+            }
+            else if (command == '*')
+            {
+                stack.Push(stack.Pop() * stack.Pop());
+            }
+            else if (command == '-')
+            {
+                double d = stack.Pop();
+                stack.Push(stack.Pop() - d);
+            }
+            else if (command == '/')
+            {
+                double d = stack.Pop();
+                stack.Push(stack.Pop() / d);
+            }
         }
     }
 
-    class DoubleStack
+
+
+    class DoubleStackOriginal
     {
         private double[] data;
         public int Depth { get; private set; }
 
-        public DoubleStack()
+        public DoubleStackOriginal()
         {
             data = new double[1000];
             Depth = 0;
